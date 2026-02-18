@@ -41,10 +41,19 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins_list(self) -> List[str]:
-        """Helper to ensure we always have a list, even if env var is a string."""
-        if isinstance(self.CORS_ORIGINS, str):
-            return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
-        return self.CORS_ORIGINS
+        """Helper to ensure we always have a list of full URLs."""
+        origins = self.CORS_ORIGINS
+        if isinstance(origins, str):
+            origins = [o.strip() for o in origins.split(",")]
+        
+        # Ensure proper scheme (Render provides 'host' which is just domain)
+        cleaned_origins = []
+        for origin in origins:
+             if origin and not origin.startswith("http"):
+                 cleaned_origins.append(f"https://{origin}")
+             else:
+                 cleaned_origins.append(origin)
+        return cleaned_origins
 
     class Config:
         env_file = ".env"

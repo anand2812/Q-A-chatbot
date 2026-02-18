@@ -1,7 +1,15 @@
 import axios from 'axios'
 
+const getBaseUrl = () => {
+  let url = import.meta.env.VITE_API_URL
+  if (url && !url.startsWith('http')) {
+    url = `https://${url}`
+  }
+  return url || '/api/v1'
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api/v1',
+  baseURL: getBaseUrl(),
   timeout: 60000,
 })
 
