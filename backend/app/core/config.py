@@ -37,7 +37,8 @@ class Settings(BaseSettings):
     # ── Server ───────────────────────────────────────────────────────────────
     # ── Server ───────────────────────────────────────────────────────────────
     # Support both list (JSON) and comma-separated string
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
+    # Default to "*" to allow all origins (simplifies deployment)
+    CORS_ORIGINS: List[str] = ["*"]
 
     @property
     def cors_origins_list(self) -> List[str]:
@@ -49,7 +50,10 @@ class Settings(BaseSettings):
         # Ensure proper scheme (Render provides 'host' which is just domain)
         cleaned_origins = []
         for origin in origins:
-             if origin and not origin.startswith("http"):
+             # Don't touch wildcard
+             if origin == "*":
+                 cleaned_origins.append(origin)
+             elif origin and not origin.startswith("http"):
                  cleaned_origins.append(f"https://{origin}")
              else:
                  cleaned_origins.append(origin)

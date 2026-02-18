@@ -16,12 +16,13 @@ services:
       - key: OPENAI_API_KEY
         sync: false  # User must provide this in dashboard
       # Pydantic List[str] expects a JSON array string
-      - key: CORS_ORIGINS
-        fromService:
-          type: web
-          name: rag-frontend
-          property: host
-        # Note: 'host' returns domain.com. Backend config will prepend https://
+      # - key: CORS_ORIGINS
+      #   fromService:
+      #     type: web
+      #     name: rag-frontend
+      #     property: host
+      # Circular dependency fix: Allow backend to start without waiting for frontend.
+      # Default to ["*"] or manual config in dashboard.
         
   # --------------------------------------------------------------------------------
   # FRONTEND (Static Site)
