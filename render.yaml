@@ -1,0 +1,46 @@
+services:
+  # --------------------------------------------------------------------------------
+  # BACKEND (Docker)
+  # --------------------------------------------------------------------------------
+  - type: web
+    name: rag-backend
+    runtime: docker
+    rootDir: ./backend
+    plan: free
+    region: oregon
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: PORT
+        value: 8000
+      - key: OPENAI_API_KEY
+        sync: false  # User must provide this in dashboard
+      # Pydantic List[str] expects a JSON array string
+      - key: CORS_ORIGINS
+        fromService:
+          type: web
+          name: rag-frontend
+          property: url
+        # We need to wrap the URL in a JSON list format. 
+        # Render doesn't easily allow string formatting in 'fromService' directly for complex types.
+        # simpler approach: Allow all origins or rely on manual update.
+        # Strategy: We will update backend config to allow comma-separated string for easier config.
+        # For now, let's leave this placeholder and I will modify config.py to tolerate standard strings.
+        
+  # --------------------------------------------------------------------------------
+  # FRONTEND (Static Site)
+  # --------------------------------------------------------------------------------
+  - type: web
+    name: rag-frontend
+    runtime: node
+    rootDir: ./frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm run preview
+    plan: free
+    region: oregon
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: rag-backend
+          property: url

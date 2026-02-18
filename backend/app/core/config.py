@@ -35,7 +35,16 @@ class Settings(BaseSettings):
     PINECONE_INDEX_NAME: str = "rag-chatbot"
 
     # ── Server ───────────────────────────────────────────────────────────────
+    # ── Server ───────────────────────────────────────────────────────────────
+    # Support both list (JSON) and comma-separated string
     CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
+
+    @property
+    def cors_origins_list(self) -> List[str]:
+        """Helper to ensure we always have a list, even if env var is a string."""
+        if isinstance(self.CORS_ORIGINS, str):
+            return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
+        return self.CORS_ORIGINS
 
     class Config:
         env_file = ".env"
