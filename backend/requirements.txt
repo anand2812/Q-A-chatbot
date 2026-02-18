@@ -1,0 +1,37 @@
+# ── Core Web Framework ───────────────────────────────────────────────────────
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9          # file uploads
+
+# ── LangChain ────────────────────────────────────────────────────────────────
+langchain>=0.2.7
+langchain-community>=0.2.7
+langchain-openai>=0.1.20
+
+# ── OpenAI ───────────────────────────────────────────────────────────────────
+openai==1.35.3
+
+# ── Embeddings: HuggingFace Sentence Transformers ────────────────────────────
+sentence-transformers==3.0.1
+transformers==4.42.4
+torch==2.3.1                     # CPU-only; use torch+cu121 for GPU
+
+# ── Vector Store: FAISS ──────────────────────────────────────────────────────
+faiss-cpu==1.8.0
+
+# ── Pinecone (optional cloud vector DB) ──────────────────────────────────────
+pinecone-client==4.0.0
+
+# ── Document Loaders ─────────────────────────────────────────────────────────
+pypdf2==3.0.1
+docx2txt==0.8
+unstructured==0.14.4             # for Markdown + misc formats
+
+# ── Config ───────────────────────────────────────────────────────────────────
+pydantic==2.7.4
+pydantic-settings==2.3.3
+python-dotenv==1.0.1
+
+# ── Utilities ────────────────────────────────────────────────────────────────
+numpy==1.26.4
+tiktoken==0.7.0                  # token counting for OpenAI
